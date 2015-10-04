@@ -33,6 +33,8 @@ public class BookService extends IntentService {
 
     private final String LOG_TAG = BookService.class.getSimpleName();
 
+    private static final int EXPECTED_EAN_LENGTH = 13;
+
     public static final String FETCH_BOOK = "it.jaschke.alexandria.services.action.FETCH_BOOK";
     public static final String DELETE_BOOK = "it.jaschke.alexandria.services.action.DELETE_BOOK";
 
@@ -47,14 +49,34 @@ public class BookService extends IntentService {
         if (intent != null) {
             final String action = intent.getAction();
             if (FETCH_BOOK.equals(action)) {
-                final String ean = intent.getStringExtra(EAN);
-                fetchBook(ean);
+                handleFetchBookIntent(intent);
             } else if (DELETE_BOOK.equals(action)) {
                 final String ean = intent.getStringExtra(EAN);
                 deleteBook(ean);
             }
         }
     }
+
+
+    private void handleFetchBookIntent(Intent fetchBookIntent){
+
+        if(!fetchBookIntent.hasExtra(EAN)){
+            sendErrorBroadcast(getString(R.string.invald_ean_error_message));
+            return;
+        }
+
+        final String ean = fetchBookIntent.getStringExtra(EAN);
+        final String jsonResponseString = fetchBook(ean);
+
+        if(null == jsonResponseString || jsonResponseString.isEmpty()){
+            sendErrorBroadcast(getString(R.string.invald_book_service_response));
+            return;
+        }
+
+        addJsonBookToContentProvider(jsonResponseString, ean);
+
+    }
+
 
     /**
      * Handle action Foo in the provided background thread with the provided
@@ -70,10 +92,10 @@ public class BookService extends IntentService {
      * Handle action fetchBook in the provided background thread with the provided
      * parameters.
      */
-    private void fetchBook(String ean) {
+    private String fetchBook(String ean) {
 
-        if(ean.length()!=13){
-            return;
+        if(ean.length() != EXPECTED_EAN_LENGTH){
+            return null;
         }
 
         Cursor bookEntry = getContentResolver().query(
@@ -86,14 +108,13 @@ public class BookService extends IntentService {
 
         if(bookEntry.getCount()>0){
             bookEntry.close();
-            return;
+            return null;
         }
 
         bookEntry.close();
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-        String bookJsonString = null;
 
         try {
             final String FORECAST_BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
@@ -114,7 +135,7 @@ public class BookService extends IntentService {
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
             if (inputStream == null) {
-                return;
+                return null;
             }
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
@@ -125,11 +146,14 @@ public class BookService extends IntentService {
             }
 
             if (buffer.length() == 0) {
-                return;
+                return null;
             }
-            bookJsonString = buffer.toString();
+
+            return buffer.toString();
+
         } catch (Exception e) {
             Log.e(LOG_TAG, "Error ", e);
+            return null;
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -141,8 +165,10 @@ public class BookService extends IntentService {
                     Log.e(LOG_TAG, "Error closing stream", e);
                 }
             }
-
         }
+    }
+
+    private void addJsonBookToContentProvider(String jsonResponse, String ean){
 
         final String ITEMS = "items";
 
@@ -157,7 +183,7 @@ public class BookService extends IntentService {
         final String IMG_URL = "thumbnail";
 
         try {
-            JSONObject bookJson = new JSONObject(bookJsonString);
+            JSONObject bookJson = new JSONObject(jsonResponse);
             JSONArray bookArray;
             if(bookJson.has(ITEMS)){
                 bookArray = bookJson.getJSONArray(ITEMS);
@@ -199,6 +225,13 @@ public class BookService extends IntentService {
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Error ", e);
         }
+
+    }
+
+    private void sendErrorBroadcast(String message){
+        Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
+        messageIntent.putExtra(MainActivity.MESSAGE_KEY, message);
+        LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
     }
 
     private void writeBackBook(String ean, String title, String subtitle, String desc, String imgUrl) {

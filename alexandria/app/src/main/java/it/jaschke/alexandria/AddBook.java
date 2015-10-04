@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -37,9 +39,14 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
+    private String lastSearchQuery;
+    private Runnable nextScheduledSearchRunnable;
+    private final Handler scheduledSearchHandler;
+
 
 
     public AddBook(){
+        scheduledSearchHandler = new Handler(Looper.getMainLooper());
     }
 
     @Override
@@ -78,12 +85,33 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                     clearFields();
                     return;
                 }
-                //Once we have an ISBN, start a book intent
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
-                bookIntent.setAction(BookService.FETCH_BOOK);
-                getActivity().startService(bookIntent);
-                AddBook.this.restartLoader();
+
+
+                if(nextScheduledSearchRunnable != null){
+                    scheduledSearchHandler.removeCallbacks(nextScheduledSearchRunnable);
+                }
+
+                if(!ean.toString().equals(lastSearchQuery)){
+
+                    final String searchQuery = ean.toString();
+
+                    nextScheduledSearchRunnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            //Once we have an ISBN, start a book intent
+                            Intent bookIntent = new Intent(getActivity(), BookService.class);
+                            bookIntent.putExtra(BookService.EAN, searchQuery);
+                            bookIntent.setAction(BookService.FETCH_BOOK);
+                            getActivity().startService(bookIntent);
+                            lastSearchQuery = searchQuery;
+                            AddBook.this.restartLoader();
+                        }
+                    };
+
+                    scheduledSearchHandler.postDelayed(nextScheduledSearchRunnable, 400);
+                }
+
+
             }
         });
 
