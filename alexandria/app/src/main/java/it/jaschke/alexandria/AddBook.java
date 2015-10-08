@@ -57,6 +57,19 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         }
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == BarcodeScannerActivity.SCAN_BOOK && resultCode == Activity.RESULT_OK && data.hasExtra(BarcodeScannerActivity.SCANNED_EAN_RESULT_EXTRA)){
+            ean.setText(data.getStringExtra(BarcodeScannerActivity.SCANNED_EAN_RESULT_EXTRA));
+            this.restartLoader();
+        } else {
+            Toast.makeText(this.getActivity(), "Didnt get a valid result", Toast.LENGTH_LONG).show();
+        }
+
+    }
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -125,7 +138,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 // are using an external app.
                 //when you're done, remove the toast below.
 
-                BarcodeScannerActivity.launch(AddBook.this.getActivity());
+                BarcodeScannerActivity.launchForScanResult(AddBook.this);
 
 //                Context context = getActivity();
 //                CharSequence text = "This button should let you scan a book for its barcode!";

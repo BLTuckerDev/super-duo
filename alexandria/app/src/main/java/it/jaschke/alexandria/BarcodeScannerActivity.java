@@ -1,33 +1,27 @@
 package it.jaschke.alexandria;
 
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
-import android.util.AttributeSet;
+import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
 
-import java.util.jar.Attributes;
-
 import it.jaschke.alexandria.services.BookService;
-import me.dm7.barcodescanner.core.IViewFinder;
-import me.dm7.barcodescanner.core.ViewFinderView;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 public class BarcodeScannerActivity extends ActionBarActivity implements ZXingScannerView.ResultHandler {
 
-    public static void launch(Context launchContext){
-        Intent activityIntent = new Intent(launchContext, BarcodeScannerActivity.class);
-        launchContext.startActivity(activityIntent);
+    public static final int SCAN_BOOK = 1;
+
+    public static final String SCANNED_EAN_RESULT_EXTRA = "ean";
+
+    public static void launchForScanResult(Fragment launchFragment){
+        Intent activityIntent = new Intent(launchFragment.getActivity(), BarcodeScannerActivity.class);
+        launchFragment.startActivityForResult(activityIntent, SCAN_BOOK);
     }
 
     private ZXingScannerView scannerView;
@@ -60,6 +54,10 @@ public class BarcodeScannerActivity extends ActionBarActivity implements ZXingSc
 
         if(scanResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13)){
             sendScanResultToBookService(scanResult.getText());
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(SCANNED_EAN_RESULT_EXTRA, scanResult.getText());
+            setResult(RESULT_OK, returnIntent);
+            finish();
         }
 
         scannerView.startCamera();
