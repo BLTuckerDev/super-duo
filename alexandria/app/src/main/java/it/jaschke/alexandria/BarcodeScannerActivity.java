@@ -50,7 +50,6 @@ public class BarcodeScannerActivity extends ActionBarActivity implements ZXingSc
 
     @Override
     public void handleResult(Result scanResult){
-        Log.d("SCAN_RESULTS", scanResult.getText() + "," + scanResult.getBarcodeFormat().toString());
 
         if(scanResult.getBarcodeFormat().equals(BarcodeFormat.EAN_13)){
             sendScanResultToBookService(scanResult.getText());
@@ -58,6 +57,7 @@ public class BarcodeScannerActivity extends ActionBarActivity implements ZXingSc
             returnIntent.putExtra(SCANNED_EAN_RESULT_EXTRA, scanResult.getText());
             setResult(RESULT_OK, returnIntent);
             finish();
+            return;
         }
 
         scannerView.startCamera();

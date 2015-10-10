@@ -62,10 +62,10 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if(requestCode == BarcodeScannerActivity.SCAN_BOOK && resultCode == Activity.RESULT_OK && data.hasExtra(BarcodeScannerActivity.SCANNED_EAN_RESULT_EXTRA)){
-            ean.setText(data.getStringExtra(BarcodeScannerActivity.SCANNED_EAN_RESULT_EXTRA));
+            final String resultEan = data.getStringExtra(BarcodeScannerActivity.SCANNED_EAN_RESULT_EXTRA);
+            lastSearchQuery = resultEan;
+            ean.setText(resultEan);
             this.restartLoader();
-        } else {
-            Toast.makeText(this.getActivity(), "Didnt get a valid result", Toast.LENGTH_LONG).show();
         }
 
     }
@@ -131,22 +131,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.scan_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // This is the callback method that the system will invoke when your button is
-                // clicked. You might do this by launching another app or by including the
-                //functionality directly in this app.
-                // Hint: Use a Try/Catch block to handle the Intent dispatch gracefully, if you
-                // are using an external app.
-                //when you're done, remove the toast below.
-
                 BarcodeScannerActivity.launchForScanResult(AddBook.this);
-
-//                Context context = getActivity();
-//                CharSequence text = "This button should let you scan a book for its barcode!";
-//                int duration = Toast.LENGTH_SHORT;
-//
-//                Toast toast = Toast.makeText(context, text, duration);
-//                toast.show();
-
             }
         });
 
