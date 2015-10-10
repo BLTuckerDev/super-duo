@@ -24,6 +24,7 @@ import java.util.Vector;
 
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
+import barqsoft.footballscores.widgets.NextGameWidgetIntentService;
 
 /**
  * Created by yehya khaled on 3/2/2015.
@@ -268,7 +269,8 @@ public class myFetchService extends IntentService
             inserted_data = mContext.getContentResolver().bulkInsert(
                     DatabaseContract.BASE_CONTENT_URI,insert_data);
 
-            Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
+
+            NextGameWidgetIntentService.getNextGame(this);
         }
         catch (JSONException e)
         {
