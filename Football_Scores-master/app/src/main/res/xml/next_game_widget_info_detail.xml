@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+    xmlns:tools="http://schemas.android.com/tools"
+    android:initialKeyguardLayout="@layout/next_game_widget"
+    android:initialLayout="@layout/next_game_widget"
+    android:minHeight="@dimen/next_game_widget_height"
+    android:minResizeHeight="@dimen/next_game_widget_height"
+    android:minResizeWidth="@dimen/next_game_widget_width"
+    android:minWidth="@dimen/next_game_widget_width"
+    android:previewImage="@drawable/ic_launcher"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="1800000"
+    android:widgetCategory="home_screen|keyguard"
+    tools:ignore="UnusedAttribute"
+    >
+
+</appwidget-provider>
