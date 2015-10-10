@@ -30,4 +30,11 @@
     The original version of this app was built by Sascha Jaschke, and a modified version is given to students in the Udacity Android Nanodegree program. </string>
     <string name="invald_ean_error_message">We were unable to find a book matching that ISBN number.</string>
     <string name="invald_book_service_response">We were unable to get a response from the book service at this time. Please check your connection and try again.</string>
+    <string name="title_activity_barcode_scanner">BarcodeScannerActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="barcode_scanner_instructions">Place a barcode in the viewfinder rectangle to scan it.</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
