@@ -23,19 +23,6 @@ import barqsoft.footballscores.Utilies;
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class GameScheduleWidgetIntentService extends RemoteViewsService {
 
-    private static final String[] SCORES_COLUMNS = {
-        DatabaseContract.SCORES_TABLE + "." + DatabaseContract.scores_table._ID,
-            DatabaseContract.scores_table.LEAGUE_COL,
-            DatabaseContract.scores_table.DATE_COL,
-            DatabaseContract.scores_table.TIME_COL,
-            DatabaseContract.scores_table.HOME_COL,
-            DatabaseContract.scores_table.AWAY_COL,
-            DatabaseContract.scores_table.HOME_GOALS_COL,
-            DatabaseContract.scores_table.AWAY_GOALS_COL,
-            DatabaseContract.scores_table.MATCH_ID,
-            DatabaseContract.scores_table.MATCH_DAY
-    };
-
     private static final int COL_HOME = 3;
     private static final int COL_AWAY = 4;
     private static final int COL_HOME_GOALS = 6;
@@ -61,15 +48,7 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
                 if(data != null){
                     data.close();
                 }
-/*
-CursorLoader(getActivity(),DatabaseContract.scores_table.buildScoreWithDate(),
-                null,null,fragmentdate,null);
 
-                Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
-            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
-            viewFragments[i] = new MainScreenFragment();
-            viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
- */
                 final long identityToken = Binder.clearCallingIdentity();
 
                 Date todaysDate = new Date(System.currentTimeMillis());
@@ -78,7 +57,7 @@ CursorLoader(getActivity(),DatabaseContract.scores_table.buildScoreWithDate(),
                 Uri scoresUri = DatabaseContract.scores_table.buildScoresStartingWithDate(formattedDate);
 
                 data = getContentResolver().query(scoresUri,
-                        SCORES_COLUMNS,
+                        null,
                         null,
                         null,
                         DatabaseContract.scores_table.DATE_COL + " ASC");
@@ -116,11 +95,9 @@ CursorLoader(getActivity(),DatabaseContract.scores_table.buildScoreWithDate(),
 
                 RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.scores_list_item);
 
-                String home = data.getString(COL_HOME);
-
                 remoteViews.setTextViewText(R.id.home_name, data.getString(COL_HOME));
                 remoteViews.setTextViewText(R.id.away_name, data.getString(COL_AWAY));
-                remoteViews.setTextViewText(R.id.data_textview, data.getString(COL_MATCHTIME));
+                remoteViews.setTextViewText(R.id.data_textview, data.getString(COL_DATE));
                 remoteViews.setTextViewText(R.id.score_textview, Utilies.getScores(data.getInt(COL_HOME_GOALS), data.getInt(COL_AWAY_GOALS)));
                 remoteViews.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(data.getString(COL_HOME)));
                 remoteViews.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(data.getString(COL_AWAY)));
