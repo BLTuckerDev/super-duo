@@ -8,7 +8,7 @@
     android:minResizeHeight="@dimen/game_schedule_widget_min_resize_height"
     android:minResizeWidth="@dimen/game_schedule_widget_min_resize_width"
     android:minWidth="@dimen/game_schedule_widget_default_width"
-    android:previewImage="@drawable/ic_launcher"
+    android:previewImage="@drawable/collection_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard"

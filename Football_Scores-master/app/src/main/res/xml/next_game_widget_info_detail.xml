@@ -9,7 +9,7 @@
     android:minResizeHeight="@dimen/next_game_widget_height"
     android:minResizeWidth="@dimen/next_game_widget_width"
     android:minWidth="@dimen/next_game_widget_width"
-    android:previewImage="@drawable/ic_launcher"
+    android:previewImage="@drawable/next_game_widget_preview_image"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard"
