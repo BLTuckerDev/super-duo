@@ -6,9 +6,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.MainActivity;
@@ -57,9 +61,21 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
                 if(data != null){
                     data.close();
                 }
+/*
+CursorLoader(getActivity(),DatabaseContract.scores_table.buildScoreWithDate(),
+                null,null,fragmentdate,null);
 
+                Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
+            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+            viewFragments[i] = new MainScreenFragment();
+            viewFragments[i].setFragmentDate(mformat.format(fragmentdate));
+ */
                 final long identityToken = Binder.clearCallingIdentity();
-                Uri scoresUri = DatabaseContract.scores_table.buildScoreWithDate();
+
+                Date todaysDate = new Date(System.currentTimeMillis());
+                SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd");
+                String formattedDate = dateFormatter.format(todaysDate);
+                Uri scoresUri = DatabaseContract.scores_table.buildScoresStartingWithDate(formattedDate);
 
                 data = getContentResolver().query(scoresUri,
                         SCORES_COLUMNS,
@@ -82,7 +98,12 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
 
             @Override
             public int getCount() {
-                return data == null ? 0 : data.getCount();
+                if(null == data){
+                    return 0;
+                }
+
+                int count = data.getCount();
+                return data.getCount();
             }
 
             @Override
@@ -94,6 +115,8 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
 
 
                 RemoteViews remoteViews = new RemoteViews(getPackageName(), R.layout.scores_list_item);
+
+                String home = data.getString(COL_HOME);
 
                 remoteViews.setTextViewText(R.id.home_name, data.getString(COL_HOME));
                 remoteViews.setTextViewText(R.id.away_name, data.getString(COL_AWAY));
@@ -126,7 +149,7 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
 
             @Override
             public boolean hasStableIds() {
-                return false;
+                return true;
             }
         };
     }

@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/next_game_widget_no_matches_textview"
         android:visibility="gone"
-        android:textColor="#010101"
+        style="@style/ScoreTextViews"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/no_matches_today"/>
@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:text="@string/test_text"
                 android:textSize="@dimen/TeamNames"
-                android:textColor="#010101" />
+                style="@style/ScoreTextViews" />
         </LinearLayout>
 
 
@@ -58,7 +58,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:textColor="#010101"
+                style="@style/ScoreTextViews"
                 android:text="@string/next_game_widget_label"
                 />
 
@@ -70,7 +70,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/test_date"
-                android:textColor="#010101" />
+                style="@style/ScoreTextViews" />
 
         </LinearLayout>
 
@@ -99,7 +99,7 @@
                 android:gravity="center"
                 android:text="@string/test_text"
                 android:textSize="@dimen/TeamNames"
-                android:textColor="#010101" />
+                style="@style/ScoreTextViews" />
         </LinearLayout>
 
 
