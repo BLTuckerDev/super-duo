@@ -40,20 +40,42 @@
         <receiver
             android:name=".widgets.NextGameWidgetProvider"
             android:enabled="true"
-            android:label="@string/next_game_widget_label">
+            android:label="@string/next_game_widget_label" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
+
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/next_game_widget_info_detail" />
         </receiver>
 
-
         <service
             android:name=".widgets.NextGameWidgetIntentService"
             android:exported="false" >
         </service>
+
+        <service
+            android:name=".widgets.GameScheduleWidgetIntentService"
+            android:enabled="true"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS">
+        </service>
+
+        <receiver
+            android:name=".widgets.GameScheduleWidgetProvider"
+            android:enabled="true"
+            android:exported="false" >
+
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/game_schedule_widget_info_detail" />
+
+        </receiver>
     </application>
 
 </manifest>

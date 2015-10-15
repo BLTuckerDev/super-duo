@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="widget_margin">8dp</dimen>
+
+    <dimen name="game_schedule_widget_default_width">250dp</dimen>
+
+    <dimen name="game_schedule_widget_default_height">180dp</dimen>
+
+    <dimen name="game_schedule_widget_min_resize_width">220dp</dimen>
+
+    <dimen name="game_schedule_widget_min_resize_height">@dimen/game_schedule_widget_default_height</dimen>
+
+
 </resources>

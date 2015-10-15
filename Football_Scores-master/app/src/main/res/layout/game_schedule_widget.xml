@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/game_schedule_widget_frame"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/widget_list"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        tools:listitem="@layout/scores_list_item"></ListView>
+
+    <TextView
+        android:id="@+id/widget_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:text="@string/no_scores_available"/>
+
+
+</FrameLayout>
