@@ -196,10 +196,12 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
         ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
 
+        //setup the author's text view
         String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
+        TextView authorsTextView = ((TextView) rootView.findViewById(R.id.authors));
+        Utilities.formatAuthorTextView(authorsTextView, authors);
+
+
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
         if(Patterns.WEB_URL.matcher(imgUrl).matches()){
             new DownloadImage((ImageView) rootView.findViewById(R.id.bookCover)).execute(imgUrl);

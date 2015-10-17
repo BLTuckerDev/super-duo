@@ -109,16 +109,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
         //setup the author's text view.
         String cursorAuthorsCommaSeparated = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
         TextView authorsTextView = ((TextView) rootView.findViewById(R.id.authors));
-
-        if(cursorAuthorsCommaSeparated == null || cursorAuthorsCommaSeparated.isEmpty()){
-            authorsTextView.setLines(1);
-            authorsTextView.setText("Unknown");
-        } else {
-            String[] authorsArray;
-            authorsArray = cursorAuthorsCommaSeparated.split(",");
-            authorsTextView.setLines(authorsArray.length);
-            authorsTextView.setText(cursorAuthorsCommaSeparated.replace(",","\n"));
-        }
+        Utilities.formatAuthorTextView(authorsTextView, cursorAuthorsCommaSeparated);
 
 
         String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
