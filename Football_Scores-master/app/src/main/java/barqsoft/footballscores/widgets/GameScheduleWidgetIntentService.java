@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
-import android.view.View;
 import android.widget.AdapterView;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -17,7 +16,7 @@ import java.util.Date;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
-import barqsoft.footballscores.Utilies;
+import barqsoft.footballscores.Utilities;
 
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -98,9 +97,9 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
                 remoteViews.setTextViewText(R.id.home_name, data.getString(COL_HOME));
                 remoteViews.setTextViewText(R.id.away_name, data.getString(COL_AWAY));
                 remoteViews.setTextViewText(R.id.data_textview, data.getString(COL_DATE));
-                remoteViews.setTextViewText(R.id.score_textview, Utilies.getScores(data.getInt(COL_HOME_GOALS), data.getInt(COL_AWAY_GOALS)));
-                remoteViews.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(data.getString(COL_HOME)));
-                remoteViews.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(data.getString(COL_AWAY)));
+                remoteViews.setTextViewText(R.id.score_textview, Utilities.getScores(data.getInt(COL_HOME_GOALS), data.getInt(COL_AWAY_GOALS)));
+                remoteViews.setImageViewResource(R.id.home_crest, Utilities.getTeamCrestByTeamName(data.getString(COL_HOME)));
+                remoteViews.setImageViewResource(R.id.away_crest, Utilities.getTeamCrestByTeamName(data.getString(COL_AWAY)));
 
                 Intent clickIntent = new Intent(getApplicationContext(), MainActivity.class);
 

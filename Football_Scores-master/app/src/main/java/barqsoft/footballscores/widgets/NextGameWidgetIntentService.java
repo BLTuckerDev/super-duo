@@ -17,7 +17,7 @@ import java.util.Date;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.MainActivity;
 import barqsoft.footballscores.R;
-import barqsoft.footballscores.Utilies;
+import barqsoft.footballscores.Utilities;
 
 public class NextGameWidgetIntentService extends IntentService {
 
@@ -89,10 +89,10 @@ public class NextGameWidgetIntentService extends IntentService {
             remoteViews.setViewVisibility(R.id.next_game_widget_away_team_column, View.VISIBLE);
 
             remoteViews.setTextViewText(R.id.next_game_widget_home_name, homeTeamName);
-            remoteViews.setImageViewResource(R.id.next_game_widget_home_crest, Utilies.getTeamCrestByTeamName(homeTeamName));
+            remoteViews.setImageViewResource(R.id.next_game_widget_home_crest, Utilities.getTeamCrestByTeamName(homeTeamName));
 
             remoteViews.setTextViewText(R.id.next_game_widget_away_name, awayTeamName);
-            remoteViews.setImageViewResource(R.id.next_game_widget_away_crest, Utilies.getTeamCrestByTeamName(awayTeamName));
+            remoteViews.setImageViewResource(R.id.next_game_widget_away_crest, Utilities.getTeamCrestByTeamName(awayTeamName));
 
             remoteViews.setTextViewText(R.id.next_game_widget_time_textview, matchTime);
 
