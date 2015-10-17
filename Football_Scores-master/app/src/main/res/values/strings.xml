@@ -41,4 +41,6 @@
     <string name="test_date">14:00</string>
     <string name="no_matches_today">No Matches Today</string>
     <string name="no_scores_available">There are no matches available right now.</string>
+    <string name="unknown_league">Not known League Please report</string>
+    <string name="group_stages_match_day_6">Group Stages, Matchday : 6</string>
 </resources>
