@@ -1,5 +1,6 @@
 package barqsoft.footballscores;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -7,12 +8,42 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class MainActivity extends ActionBarActivity {
+
     public static int selected_match_id;
+
     public static int current_fragment = 2;
+
     public static String LOG_TAG = "MainActivity";
+
+    private static String DATE_INTENT_EXTRA_KEY = "date";
+
+
     private final String save_tag = "Save Test";
     private PagerFragment my_main;
+
+    private static void calculcateCurrentFragment(int todaysDate, int intentRequestedDate){
+
+        int fragmentPage = (intentRequestedDate + 2) - todaysDate;
+
+        if(fragmentPage >= 0 && fragmentPage <= 4){
+            MainActivity.current_fragment = fragmentPage;
+        }
+
+    }
+
+
+    public static Intent getLaunchActivityToDateIntent(Context context, String dateString){
+
+        Intent launchIntent = new Intent(context, MainActivity.class);
+
+        launchIntent.putExtra(DATE_INTENT_EXTRA_KEY, dateString);
+
+        return launchIntent;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,12 +51,39 @@ public class MainActivity extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         Log.d(LOG_TAG, "Reached MainActivity onCreate");
         if (savedInstanceState == null) {
-            my_main = new PagerFragment();
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, my_main)
-                    .commit();
+            setupPagerFragment();
         }
     }
+
+
+    private void setupPagerFragment(){
+
+        if(getIntent().hasExtra(DATE_INTENT_EXTRA_KEY)){
+
+            String dateExtra = getIntent().getStringExtra(DATE_INTENT_EXTRA_KEY);
+            String[] dateParts = dateExtra.split("-");
+
+            if(dateParts.length == 3){
+                try{
+                    int dayOfMonth = Calendar.getInstance().get(Calendar.DATE);
+                    int intentExtraDay = Integer.valueOf(dateParts[2]);
+                    calculcateCurrentFragment(dayOfMonth, intentExtraDay);
+                } catch (NumberFormatException ex){
+                    current_fragment = 2;
+                    Log.e(LOG_TAG, "Invalid date string passed to MainActivity");
+                }
+            }
+
+        } else {
+            current_fragment = 2;
+        }
+
+        my_main = new PagerFragment();
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.container, my_main)
+                .commit();
+    }
+
 
 
     @Override

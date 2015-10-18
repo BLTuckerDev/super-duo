@@ -44,7 +44,7 @@ public class Utilities {
                 return context.getString(R.string.final_text);
             }
         } else {
-            return context.getString(match_day) + String.valueOf(match_day);
+            return context.getString(R.string.matchday_text) + String.valueOf(match_day);
         }
     }
 
