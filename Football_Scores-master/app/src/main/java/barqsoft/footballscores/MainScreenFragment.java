@@ -99,8 +99,9 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
         score_list.post(new Runnable() {
             @Override
             public void run() {
-                score_list.setSelection(scrollTome);
-
+                if(MainActivity.selected_match_id != 0.0 && score_list.getFirstVisiblePosition() == 0){
+                    score_list.setSelection(scrollTome);
+                }
             }
         });
     }
