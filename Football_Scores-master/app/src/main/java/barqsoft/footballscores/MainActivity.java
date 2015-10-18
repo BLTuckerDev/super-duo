@@ -20,7 +20,7 @@ public class MainActivity extends ActionBarActivity {
     public static String LOG_TAG = "MainActivity";
 
     private static String DATE_INTENT_EXTRA_KEY = "date";
-
+    private static String MATCH_ID_INTENT_EXTRA_KEY = "matchId";
 
     private final String save_tag = "Save Test";
     private PagerFragment my_main;
@@ -36,11 +36,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    public static Intent getLaunchActivityToDateIntent(Context context, String dateString){
+    public static Intent getLaunchActivityToDateIntent(Context context, String dateString, Double matchId){
 
         Intent launchIntent = new Intent(context, MainActivity.class);
 
         launchIntent.putExtra(DATE_INTENT_EXTRA_KEY, dateString);
+        launchIntent.putExtra(MATCH_ID_INTENT_EXTRA_KEY, matchId);
 
         return launchIntent;
     }
@@ -59,24 +60,19 @@ public class MainActivity extends ActionBarActivity {
     private void setupPagerFragment(){
 
         if(getIntent().hasExtra(DATE_INTENT_EXTRA_KEY)){
-
-            String dateExtra = getIntent().getStringExtra(DATE_INTENT_EXTRA_KEY);
-            String[] dateParts = dateExtra.split("-");
-
-            if(dateParts.length == 3){
-                try{
-                    int dayOfMonth = Calendar.getInstance().get(Calendar.DATE);
-                    int intentExtraDay = Integer.valueOf(dateParts[2]);
-                    calculcateCurrentFragment(dayOfMonth, intentExtraDay);
-                } catch (NumberFormatException ex){
-                    current_fragment = 2;
-                    Log.e(LOG_TAG, "Invalid date string passed to MainActivity");
-                }
-            }
-
+            handleIntentDateExtra();
         } else {
             current_fragment = 2;
         }
+
+
+        if(getIntent().hasExtra(MATCH_ID_INTENT_EXTRA_KEY)){
+            handleIntentMatchIdExtra();
+        } else {
+            selected_match_id = 0;
+        }
+
+
 
         my_main = new PagerFragment();
         getSupportFragmentManager().beginTransaction()
@@ -84,6 +80,27 @@ public class MainActivity extends ActionBarActivity {
                 .commit();
     }
 
+    private void handleIntentDateExtra(){
+
+        String dateExtra = getIntent().getStringExtra(DATE_INTENT_EXTRA_KEY);
+        String[] dateParts = dateExtra.split("-");
+
+        if(dateParts.length == 3){
+            try{
+                int dayOfMonth = Calendar.getInstance().get(Calendar.DATE);
+                int intentExtraDay = Integer.valueOf(dateParts[2]);
+                calculcateCurrentFragment(dayOfMonth, intentExtraDay);
+            } catch (NumberFormatException ex){
+                current_fragment = 2;
+                Log.e(LOG_TAG, "Invalid date string passed to MainActivity");
+            }
+        }
+    }
+
+    private void handleIntentMatchIdExtra(){
+        Double matchIdExtra = getIntent().getDoubleExtra(MATCH_ID_INTENT_EXTRA_KEY, 0.0);
+        selected_match_id = matchIdExtra.intValue();
+    }
 
 
     @Override

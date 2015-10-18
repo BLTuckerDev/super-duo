@@ -24,6 +24,8 @@ public class NextGameWidgetIntentService extends IntentService {
     private static final int COL_HOME = 3;
     private static final int COL_AWAY = 4;
     private static final int COL_MATCHTIME = 2;
+    private static final int COL_DATE = 1;
+    private static final int COL_ID = 8;
 
 
     public static void getNextGame(Context context) {
@@ -68,15 +70,17 @@ public class NextGameWidgetIntentService extends IntentService {
         String homeTeamName = data.getString(COL_HOME);
         String awayTeamName = data.getString(COL_AWAY);
         String matchTime = data.getString(COL_MATCHTIME);
+        String matchDate = data.getString(COL_DATE);
+        Double matchId = data.getDouble(COL_ID);
 
 
         data.close();
 
-        updateNextMatch(widgetManager, appWidgetIds, homeTeamName, awayTeamName, matchTime);
+        updateNextMatch(widgetManager, appWidgetIds, homeTeamName, awayTeamName, matchTime, matchDate, matchId);
 
     }
 
-    private void updateNextMatch(AppWidgetManager widgetManager, int[] appWidgetIds,String homeTeamName, String awayTeamName, String matchTime){
+    private void updateNextMatch(AppWidgetManager widgetManager, int[] appWidgetIds,String homeTeamName, String awayTeamName, String matchTime, String matchDate, Double matchId){
 
         for(int widgetId : appWidgetIds){
 
@@ -96,7 +100,9 @@ public class NextGameWidgetIntentService extends IntentService {
 
             remoteViews.setTextViewText(R.id.next_game_widget_time_textview, matchTime);
 
-            Intent widgetIntent = new Intent(this, MainActivity.class);
+            Intent widgetIntent = MainActivity.getLaunchActivityToDateIntent(this, matchDate, matchId);
+
+
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, widgetIntent, 0);
             remoteViews.setOnClickPendingIntent(R.id.next_game_widget_container_layout, pendingIntent);
 

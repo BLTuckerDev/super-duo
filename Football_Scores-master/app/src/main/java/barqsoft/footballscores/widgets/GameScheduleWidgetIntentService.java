@@ -101,7 +101,7 @@ public class GameScheduleWidgetIntentService extends RemoteViewsService {
                 remoteViews.setImageViewResource(R.id.home_crest, Utilities.getTeamCrestByTeamName(data.getString(COL_HOME)));
                 remoteViews.setImageViewResource(R.id.away_crest, Utilities.getTeamCrestByTeamName(data.getString(COL_AWAY)));
 
-                Intent clickIntent = MainActivity.getLaunchActivityToDateIntent(getApplicationContext(), data.getString(COL_DATE));
+                Intent clickIntent = MainActivity.getLaunchActivityToDateIntent(getApplicationContext(), data.getString(COL_DATE), data.getDouble(COL_ID));
 
                 remoteViews.setOnClickFillInIntent(R.id.score_list_item_container, clickIntent);
 
