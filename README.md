@@ -1,3 +1,10 @@
+# Super-Duo
+
+This is a Udacity Android Nano degree project. The project 
+gives you two 'legacy' code bases and has you fix a few bugs
+and add some new features.
+
+
 # Football Scores App Api Key
 
 The football scores app requires an api key to communicate with
